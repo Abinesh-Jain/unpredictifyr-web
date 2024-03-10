@@ -1,0 +1,25 @@
+<div class="container-fluid vh-100">
+    <div class="card bg-dark text-white h-100">
+        <div class="card-header fs-3">
+            Chat
+        </div>
+        <div class="card-body overflow-auto" #scroll>
+            <div *ngFor="let message of messages">
+                <div class="mb-3" [ngClass]="{'d-flex justify-content-end':message.isSent}">
+                    <span class="bg-light text-dark d-inline-block p-3" [ngClass]="message.isSent ? 'sent':'received'">
+                        {{ message.text }}
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="input-group">
+                <input type="text" class="form-control" [(ngModel)]="message" placeholder="Type your message..."
+                    (keydown.enter)="sendMessage()">
+                <button class="btn btn-primary" type="button" (click)="sendMessage()">
+                    Send
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
