@@ -10,7 +10,7 @@ export class ChatServiceService {
   private socket: any;
 
   constructor() {
-    this.socket = io('http://localhost:3000');
+    this.socket = io('https://node-js-g4r5.onrender.com/');
   }
 
   // Emit an event to the server
