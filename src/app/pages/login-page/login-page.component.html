@@ -1,0 +1,33 @@
+<div class="dvh-100 p-5">
+    <div class="row h-100">
+        <div class="col rounded p-5 picsum d-none d-sm-none d-md-block" appPicsum> </div>
+        <div class="col p-0 p-sm-0 p-md-5 d-flex flex-column justify-content-between">
+            <div class="jumbotron">
+                <h1 class="display-4">Welcome to Unpredictifyr!</h1>
+                <p class="lead">This is a simple hero unit, a simple jumbotron-style component for calling extra
+                    attention to featured content or information.</p>
+                <hr class="my-4">
+            </div>
+            <div>
+                <div class="row align-items-baseline">
+                    <p class="col-9 fs-3">
+                        What's your name ?
+                    </p>
+                    <div class="col-3">
+                        <app-robot [name]="name.value!"></app-robot>
+                    </div>
+                </div>
+                <div class="form-group mb-3">
+                    <input type="text" class="form-control form-control-lg" placeholder="Enter name" [formControl]=name
+                        (keydown.enter)="submit()">
+                    <div *ngIf="name.invalid && (name.dirty || name.touched)" class="text-danger form-text">
+                        Please enter your name.
+                    </div>
+                </div>
+                <button class="btn btn-primary w-100" (click)="submit()">
+                    Get Started
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

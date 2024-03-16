@@ -1,13 +1,22 @@
-<div class="container-fluid vh-100">
-    <div class="card bg-dark text-white h-100">
-        <div class="card-header fs-3">
-            Chat
+<div class="container-fluid vh-100 p-0">
+    <div class="card h-100">
+        <div class="card-header fs-3 d-flex justify-content-between">
+            <p> Chat </p>
+            <app-name-modal [name]="name"></app-name-modal>
         </div>
         <div class="card-body overflow-auto" #scroll>
             <div *ngFor="let message of messages">
                 <div class="mb-3" [ngClass]="{'d-flex justify-content-end':message.isSent}">
-                    <span class="bg-light text-dark d-inline-block p-3" [ngClass]="message.isSent ? 'sent':'received'">
-                        {{ message.text }}
+                    <div *ngIf="message.type==MessageType.info" class="text-center">
+                        {{message.text}}
+                    </div>
+                    <span *ngIf="message.type!=MessageType.info" class="d-inline-block px-3 bg-success"
+                        [ngClass]="message.isSent ? 'sent':'received'">
+                        <div>
+                            <div *ngIf="!message.isSent" class="time text-primary">{{message.sender}}</div>
+                            <div>{{ message.text }}</div>
+                            <div class="time text-info text-right">{{getTime(message.timestamp)}}</div>
+                        </div>
                     </span>
                 </div>
             </div>

@@ -1,8 +1,9 @@
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild, inject } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ChatServiceService } from '../../services/chat-service.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Router } from '@angular/router';
+import { NameModalComponent } from "../../components/name-modal/name-modal.component";
 
 interface Message {
   text: string;
@@ -11,6 +12,7 @@ interface Message {
   isSent: boolean;
   isRead?: boolean;
   attachment?: string;
+  type: MessageType;
 }
 
 @Component({
@@ -18,36 +20,44 @@ interface Message {
   standalone: true,
   templateUrl: './chat-page.component.html',
   styleUrl: './chat-page.component.scss',
-  imports: [CommonModule, FormsModule]
+  imports: [CommonModule, FormsModule, NameModalComponent]
 })
-export class ChatPageComponent implements OnInit, AfterViewInit {
+export class ChatPageComponent implements OnInit {
   @ViewChild('scroll') private scroll?: ElementRef;
 
-  name?: string;
+  name: string = '';
   message: string = '';
   messages: Message[] = [];
+  MessageType = MessageType;
 
-  private modalService = inject(NgbModal);
-
-  constructor(private chatService: ChatServiceService) { }
+  constructor(private chatService: ChatServiceService, private router: Router) { }
 
 
   ngOnInit(): void {
-    this.chatService.onEvent('message').subscribe((message: any) => {
+    const name = localStorage.getItem('name');
+    if (!name) this.router.navigate(['']);
+    this.name = name!;
+    this.chatService.emit('name', name);
+    this.chatService.onEvent('info').subscribe((info: any) => {
       this.messages.push({
-        text: `${message}`,
-        sender: '',
-        timestamp: new Date(),
+        text: info['message'],
+        sender: this.capitalizeFirstLetter(`${info['sender'] ?? 'Someone'}`),
+        timestamp: new Date(info['timestamp']),
         isSent: false,
+        type: MessageType.info,
       });
       this.scrollToBottom();
     })
-  }
-
-  ngAfterViewInit(): void {
-    let name = prompt('What is your name ?');
-    this.name = name ?? undefined;
-    this.chatService.emit('name', name);
+    this.chatService.onEvent('message').subscribe((message: any) => {
+      this.messages.push({
+        text: message['message'],
+        sender: this.capitalizeFirstLetter(`${message['sender'] ?? 'Someone'}`),
+        timestamp: new Date(message['timestamp']),
+        isSent: false,
+        type: MessageType.received,
+      });
+      this.scrollToBottom();
+    })
   }
 
   sendMessage() {
@@ -55,9 +65,10 @@ export class ChatPageComponent implements OnInit, AfterViewInit {
     this.chatService.emit('message', this.message);
     let message: Message = {
       text: this.message,
-      sender: '',
+      sender: 'You',
       timestamp: new Date(),
       isSent: true,
+      type: MessageType.sent,
     };
     this.messages.push(message);
     this.message = '';
@@ -74,4 +85,24 @@ export class ChatPageComponent implements OnInit, AfterViewInit {
     }
   }
 
+  getTime(date: Date): string {
+    let hours = date.getHours();
+    const minutes = date.getMinutes();
+    const ampm = hours >= 12 ? 'pm' : 'am';
+    hours = hours % 12;
+    hours = hours ? hours : 12;
+    const paddedHours = String(hours).padStart(2, '0');
+    const paddedMinutes = String(minutes).padStart(2, '0');
+    return `${paddedHours}:${paddedMinutes} ${ampm}`;
+  }
+
+  capitalizeFirstLetter(string: string): string {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+
+}
+
+
+enum MessageType {
+  sent, received, info
 }
