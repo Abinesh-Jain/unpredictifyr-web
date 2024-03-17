@@ -1,19 +1,11 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { ChatServiceService } from '../../services/chat-service.service';
+import { ChatServiceService } from '../../services/chat-service/chat-service.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NameModalComponent } from "../../components/name-modal/name-modal.component";
-
-interface Message {
-  text: string;
-  sender: string;
-  timestamp: Date;
-  isSent: boolean;
-  isRead?: boolean;
-  attachment?: string;
-  type: MessageType;
-}
+import { Message, MessageType } from '../../models/message.modal';
+import { MessageService } from '../../services/message/message.service';
 
 @Component({
   selector: 'app-chat-page',
@@ -28,9 +20,11 @@ export class ChatPageComponent implements OnInit {
   name: string = '';
   message: string = '';
   messages: Message[] = [];
+  mediaStream: MediaStream | undefined;
+
   MessageType = MessageType;
 
-  constructor(private chatService: ChatServiceService, private router: Router) { }
+  constructor(private chatService: ChatServiceService, private router: Router, private messageService: MessageService,) { }
 
 
   ngOnInit(): void {
@@ -38,25 +32,33 @@ export class ChatPageComponent implements OnInit {
     if (!name) this.router.navigate(['']);
     this.name = name!;
     this.chatService.emit('name', name);
+    this.messageService.getAllMessages().then((messages: Message[]) => {
+      this.messages = messages;
+      this.scrollToBottom();
+    })
     this.chatService.onEvent('info').subscribe((info: any) => {
-      this.messages.push({
+      const msg = {
         text: info['message'],
         sender: this.capitalizeFirstLetter(`${info['sender'] ?? 'Someone'}`),
         timestamp: new Date(info['timestamp']),
         isSent: false,
         type: MessageType.info,
-      });
+      }
+      this.messages.push(msg);
       this.scrollToBottom();
+      this.messageService.addMessage(msg);
     })
     this.chatService.onEvent('message').subscribe((message: any) => {
-      this.messages.push({
+      const msg = {
         text: message['message'],
         sender: this.capitalizeFirstLetter(`${message['sender'] ?? 'Someone'}`),
         timestamp: new Date(message['timestamp']),
         isSent: false,
         type: MessageType.received,
-      });
+      };
+      this.messages.push(msg);
       this.scrollToBottom();
+      this.messageService.addMessage(msg);
     })
   }
 
@@ -73,6 +75,7 @@ export class ChatPageComponent implements OnInit {
     this.messages.push(message);
     this.message = '';
     this.scrollToBottom();
+    this.messageService.addMessage(message);
   }
 
   scrollToBottom() {
@@ -100,9 +103,17 @@ export class ChatPageComponent implements OnInit {
     return string.charAt(0).toUpperCase() + string.slice(1);
   }
 
-}
+  react() {
+    if (this.mediaStream) {
+      this.mediaStream.getTracks().forEach((track) => {
+        track.stop();
+      });
+      this.mediaStream = undefined;
+    } else {
+      navigator.mediaDevices.getUserMedia({ video: true }).then((stream) => {
+        this.mediaStream = stream;
+      });
+    }
+  }
 
-
-enum MessageType {
-  sent, received, info
 }

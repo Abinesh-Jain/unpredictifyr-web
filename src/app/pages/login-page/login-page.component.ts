@@ -22,7 +22,7 @@ export class LoginPageComponent implements OnInit {
     const name = localStorage.getItem('name');
     if (name) {
       this.name.setValue(name);
-      this.router.navigate(['chat'], { queryParams: { name: this.name.value } });
+      this.router.navigate(['chat']);
     }
   }
 

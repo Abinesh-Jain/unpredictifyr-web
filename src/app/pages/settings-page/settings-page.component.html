@@ -1,9 +1,11 @@
 <div class="dvh-100 p-3">
-    <img src="https://robohash.org/{{name}}" alt="robot">
-    <div class="form-group">
-        <label class="form-label">
-            Change Name
-        </label>
+    <img src="https://robohash.org/{{name}}" alt="robot" class="img-fluid">
+    <div class="form-floating mb-3">
         <input type="text" [(ngModel)]="name" class="form-control">
+        <label>Your Name</label>
+    </div>
+    <div class="d-flex justify-content-between align-items-center border p-3 rounded">
+        <div>Change Theme</div>
+        <app-theme-toggle (change)="changeTheme($event)"></app-theme-toggle>
     </div>
 </div>

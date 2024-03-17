@@ -1,4 +1,3 @@
-<div class="container bg-success vh-100">
-    <div class="h-25 bg-danger">
-    </div>
+<div *ngFor="let car of cars">
+    <img src="{{car.image}}" alt="{{car.name}}" class="img-fluid">
 </div>
