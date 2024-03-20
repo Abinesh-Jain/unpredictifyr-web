@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { ChatServiceService } from '../../services/chat-service/chat-service.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -36,30 +36,54 @@ export class ChatPageComponent implements OnInit {
       this.messages = messages;
       this.scrollToBottom();
     })
-    this.chatService.onEvent('info').subscribe((info: any) => {
-      const msg = {
-        text: info['message'],
-        sender: this.capitalizeFirstLetter(`${info['sender'] ?? 'Someone'}`),
-        timestamp: new Date(info['timestamp']),
-        isSent: false,
-        type: MessageType.info,
-      }
-      this.messages.push(msg);
-      this.scrollToBottom();
-      this.messageService.addMessage(msg);
-    })
-    this.chatService.onEvent('message').subscribe((message: any) => {
-      const msg = {
-        text: message['message'],
-        sender: this.capitalizeFirstLetter(`${message['sender'] ?? 'Someone'}`),
-        timestamp: new Date(message['timestamp']),
-        isSent: false,
-        type: MessageType.received,
-      };
-      this.messages.push(msg);
-      this.scrollToBottom();
-      this.messageService.addMessage(msg);
-    })
+    this.chatService.onEvent('connect').subscribe(() => this.onConnectionChanged(true))
+    this.chatService.onEvent('disconnect').subscribe(() => this.onConnectionChanged(false))
+    this.chatService.onEvent('info').subscribe(info => this.onInfoReceived(info))
+    this.chatService.onEvent('message').subscribe(message => this.onMessageReceived(message))
+  }
+
+  @HostListener('window:beforeunload', ['$event'])
+  beforeunloadHandler(event: Event) {
+    this.onConnectionChanged(false);
+  }
+
+  onConnectionChanged(connected: boolean) {
+    const msg = {
+      text: connected ? 'You joined the chat' : 'You left the chat',
+      sender: this.name,
+      timestamp: new Date(),
+      isSent: false,
+      type: MessageType.info,
+    };
+    this.messages.push(msg);
+    this.scrollToBottom();
+    this.messageService.addMessage(msg);
+  }
+
+  onInfoReceived(info: any) {
+    const msg = {
+      text: info['message'],
+      sender: this.capitalizeFirstLetter(`${info['sender'] ?? 'Someone'}`),
+      timestamp: new Date(info['timestamp']),
+      isSent: false,
+      type: MessageType.info,
+    }
+    this.messages.push(msg);
+    this.scrollToBottom();
+    this.messageService.addMessage(msg);
+  }
+
+  onMessageReceived(message: any) {
+    const msg = {
+      text: message['message'],
+      sender: this.capitalizeFirstLetter(`${message['sender'] ?? 'Someone'}`),
+      timestamp: new Date(message['timestamp']),
+      isSent: false,
+      type: MessageType.received,
+    };
+    this.messages.push(msg);
+    this.scrollToBottom();
+    this.messageService.addMessage(msg);
   }
 
   sendMessage() {
@@ -75,6 +99,7 @@ export class ChatPageComponent implements OnInit {
     this.messages.push(message);
     this.message = '';
     this.scrollToBottom();
+    document.querySelector('input')?.focus();
     this.messageService.addMessage(message);
   }
 

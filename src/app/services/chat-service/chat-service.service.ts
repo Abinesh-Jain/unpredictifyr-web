@@ -27,4 +27,8 @@ export class ChatServiceService {
       });
     });
   }
+
+  disconnect() {
+    this.socket.disconnect();
+  }
 }

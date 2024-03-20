@@ -4,6 +4,7 @@ import { TestPageComponent } from './pages/test-page/test-page.component';
 import { LoginPageComponent } from './pages/login-page/login-page.component';
 import { chatGuardGuard } from './guards/chat-guard/chat-guard.guard';
 import { SettingsPageComponent } from './pages/settings-page/settings-page.component';
+import { VideoPageComponent } from './pages/video-page/video-page.component';
 
 export const routes: Routes = [
     {
@@ -21,6 +22,10 @@ export const routes: Routes = [
     {
         path: 'settings',
         component: SettingsPageComponent
+    },
+    {
+        path: 'video',
+        component: VideoPageComponent
     },
     {
         path: '**',

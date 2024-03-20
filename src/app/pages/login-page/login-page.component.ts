@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { PicsumDirective } from '../../directives/picsum/picsum.directive';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -12,7 +12,7 @@ import { RobotComponent } from "../../components/robot/robot.component";
   styleUrl: './login-page.component.scss',
   imports: [PicsumDirective, ReactiveFormsModule, CommonModule, RobotComponent]
 })
-export class LoginPageComponent implements OnInit {
+export class LoginPageComponent implements OnInit, AfterViewInit {
   name = new FormControl('', Validators.required)
 
   constructor(private router: Router) { }
@@ -24,6 +24,10 @@ export class LoginPageComponent implements OnInit {
       this.name.setValue(name);
       this.router.navigate(['chat']);
     }
+  }
+
+  ngAfterViewInit(): void {
+    document.querySelector('input')?.focus();
   }
 
   submit() {
