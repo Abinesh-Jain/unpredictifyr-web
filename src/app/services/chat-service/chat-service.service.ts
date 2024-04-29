@@ -12,6 +12,7 @@ export class ChatServiceService {
 
   constructor() {
     this.socket = io(environment.baseURL);
+    this.socket.on('error', (error: any) => console.error(error));
   }
 
   // Emit an event to the server

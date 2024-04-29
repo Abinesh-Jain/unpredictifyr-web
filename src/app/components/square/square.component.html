@@ -1,0 +1,5 @@
+<div class="h-100px center mb-3 p-3">
+    <button *ngIf="!value" class="w-100 h-100 btn btn-primary">{{value}}</button>
+    <button *ngIf="value == 'X'" class="w-100 h-100 btn btn-success">{{value}}</button>
+    <button *ngIf="value == 'O'" class="w-100 h-100 btn btn-danger">{{value}}</button>
+</div>

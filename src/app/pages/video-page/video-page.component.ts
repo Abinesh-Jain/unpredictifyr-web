@@ -1,6 +1,7 @@
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ChatServiceService } from '../../services/chat-service/chat-service.service';
 import { PeerService } from '../../services/peer/peer.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-video-page',
@@ -13,9 +14,11 @@ export class VideoPageComponent implements OnInit, AfterViewInit {
 
   @ViewChild('videos') videos?: ElementRef<HTMLDivElement>;
 
-  constructor(private socketService: ChatServiceService, private peerService: PeerService) { }
+  constructor(private socketService: ChatServiceService, private peerService: PeerService, private router: Router) { }
 
   ngOnInit(): void {
+    const name = localStorage.getItem('name');
+    if (!name) this.router.navigate(['']);
     this.peerService.onOpen().subscribe(id => this.socketService.emit('join', id));
   }
 

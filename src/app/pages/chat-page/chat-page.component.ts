@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ChatServiceService } from '../../services/chat-service/chat-service.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { NameModalComponent } from "../../components/name-modal/name-modal.component";
 import { Message, MessageType } from '../../models/message.modal';
 import { MessageService } from '../../services/message/message.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-chat-page',
@@ -14,13 +15,14 @@ import { MessageService } from '../../services/message/message.service';
   styleUrl: './chat-page.component.scss',
   imports: [CommonModule, FormsModule, NameModalComponent]
 })
-export class ChatPageComponent implements OnInit {
+export class ChatPageComponent implements OnInit, OnDestroy {
   @ViewChild('scroll') private scroll?: ElementRef;
 
   name: string = '';
   message: string = '';
   messages: Message[] = [];
   mediaStream: MediaStream | undefined;
+  private subscriptions: Subscription[] = [];
 
   MessageType = MessageType;
 
@@ -36,10 +38,16 @@ export class ChatPageComponent implements OnInit {
       this.messages = messages;
       this.scrollToBottom();
     })
-    this.chatService.onEvent('connect').subscribe(() => this.onConnectionChanged(true))
-    this.chatService.onEvent('disconnect').subscribe(() => this.onConnectionChanged(false))
-    this.chatService.onEvent('info').subscribe(info => this.onInfoReceived(info))
-    this.chatService.onEvent('message').subscribe(message => this.onMessageReceived(message))
+    this.subscriptions.push(
+      this.chatService.onEvent('connect').subscribe(() => this.onConnectionChanged(true)),
+      this.chatService.onEvent('disconnect').subscribe(() => this.onConnectionChanged(false)),
+      this.chatService.onEvent('info').subscribe(info => this.onInfoReceived(info)),
+      this.chatService.onEvent('message').subscribe(message => this.onMessageReceived(message)),
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach(subscription => subscription.unsubscribe());
   }
 
   @HostListener('window:beforeunload', ['$event'])
@@ -139,6 +147,11 @@ export class ChatPageComponent implements OnInit {
         this.mediaStream = stream;
       });
     }
+  }
+
+  clearChat() {
+    this.messages = [];
+    this.messageService.clearMessages();
   }
 
 }
