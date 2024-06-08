@@ -2,7 +2,7 @@ import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { PicsumDirective } from '../../directives/picsum/picsum.directive';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { RobotComponent } from "../../components/robot/robot.component";
 
 @Component({
@@ -10,7 +10,7 @@ import { RobotComponent } from "../../components/robot/robot.component";
   standalone: true,
   templateUrl: './login-page.component.html',
   styleUrl: './login-page.component.scss',
-  imports: [PicsumDirective, ReactiveFormsModule, CommonModule, RobotComponent]
+  imports: [PicsumDirective, ReactiveFormsModule, CommonModule, RobotComponent, RouterModule]
 })
 export class LoginPageComponent implements OnInit, AfterViewInit {
   name = new FormControl('', Validators.required)

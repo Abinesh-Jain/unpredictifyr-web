@@ -1,0 +1,80 @@
+<div class="dvh-100 p-5">
+    <div class="row h-100">
+        <div class="col rounded p-5 picsum d-none d-sm-none d-md-block" appPicsum></div>
+        <div class="col p-0 p-sm-0 p-md-5 d-flex flex-column justify-content-between">
+            <ul ngbNav #nav="ngbNav" class="nav-tabs">
+                <li ngbNavItem>
+                    <a ngbNavLink>LOGIN</a>
+                    <ng-template ngbNavContent>
+                        <form [formGroup]="loginForm" (ngSubmit)="login()">
+                            <label class="form-label">Email</label>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text">&#64;</span>
+                                <input type="email" formControlName="email" class="form-control"
+                                    placeholder="example@mail.com" name="email">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Password</label>
+                                <input type="password" formControlName="password" class="form-control" name="password">
+                            </div>
+                            <div class="row mb-4">
+                                <div class="col-md-6 d-flex justify-content-center">
+                                    <div class="form-check mb-3 mb-md-0">
+                                        <input class="form-check-input" type="checkbox" checked />
+                                        <label class="form-check-label"> Remember me </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 d-flex justify-content-center">
+                                    <a>Forgot password?</a>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100" [disabled]="loginForm.invalid">SIGN
+                                IN</button>
+                            <div class="row">
+                                <hr class="col-5 my-4">
+                                <p class="col-2 center mt-2">or</p>
+                                <hr class="col-5 my-4">
+                            </div>
+                            <button routerLink="/" class="btn btn-primary w-100">Continue as Guest</button>
+                        </form>
+                    </ng-template>
+                </li>
+                <li ngbNavItem>
+                    <a ngbNavLink>REGISTER</a>
+                    <ng-template ngbNavContent>
+                        <form [formGroup]="signUpForm" (ngSubmit)="signUp()">
+                            <div class="mb-3">
+                                <label class="form-label">Username</label>
+                                <input type="text" formControlName="name" class="form-control" name="name" required>
+                            </div>
+                            <label class="form-label">Email</label>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text">&#64;</span>
+                                <input type="email" formControlName="email" class="form-control" name="email"
+                                    placeholder="example@mail.com" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Password</label>
+                                <input type="password" formControlName="password" class="form-control" name="password"
+                                    required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Confirm Password</label>
+                                <input type="password" formControlName="confirmPassword" class="form-control"
+                                    name="confirmPassword" required>
+                            </div>
+                            <div class="form-check mb-3">
+                                <input class="form-check-input" type="checkbox" checked />
+                                <label class="form-check-label"> I have read and agree to the terms </label>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100" [disabled]="signUpForm.invalid">
+                                SIGN UP
+                            </button>
+                        </form>
+                    </ng-template>
+                </li>
+            </ul>
+            <div [ngbNavOutlet]="nav" class="mt-2"></div>
+        </div>
+    </div>
+</div>

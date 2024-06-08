@@ -6,7 +6,6 @@
                 <h1 class="display-4">Welcome to Unpredictifyr!</h1>
                 <p class="lead">Where conversations are like a comedy show, full of laughs, jokes,
                     and unexpected punchlines! It's the perfect place to LOL friends!</p>
-                <hr class="my-4">
             </div>
             <div>
                 <div class="row align-items-baseline">
@@ -27,6 +26,11 @@
                 <button class="btn btn-primary w-100" (click)="submit()">
                     Get Started
                 </button>
+                <div class="text-center">
+                    <a routerLink="/auth" class="btn btn-link">Login</a>
+                    <span class="mx-2 align-middle">or</span>
+                    <a routerLink="/auth" class="btn btn-link">Sign Up</a>
+                </div>
             </div>
         </div>
     </div>

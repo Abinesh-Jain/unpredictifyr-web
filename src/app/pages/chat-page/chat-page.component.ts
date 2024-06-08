@@ -3,7 +3,6 @@ import { ChatServiceService } from '../../services/chat-service/chat-service.ser
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { NameModalComponent } from "../../components/name-modal/name-modal.component";
 import { Message, MessageType } from '../../models/message.modal';
 import { MessageService } from '../../services/message/message.service';
 import { Subscription } from 'rxjs';
@@ -13,7 +12,7 @@ import { Subscription } from 'rxjs';
   standalone: true,
   templateUrl: './chat-page.component.html',
   styleUrl: './chat-page.component.scss',
-  imports: [CommonModule, FormsModule, NameModalComponent]
+  imports: [CommonModule, FormsModule]
 })
 export class ChatPageComponent implements OnInit, OnDestroy {
   @ViewChild('scroll') private scroll?: ElementRef;
