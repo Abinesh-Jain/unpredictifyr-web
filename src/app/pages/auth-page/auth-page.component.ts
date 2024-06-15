@@ -1,10 +1,10 @@
-import { Component, OnDestroy } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy } from '@angular/core';
 import { NgbNavConfig, NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { PicsumDirective } from '../../directives/picsum/picsum.directive';
 import { AuthService } from '../../services/auth/auth.service';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ToastService } from '../../services/toast/toast.service';
+import { ToastService, ToastType } from '../../services/toast/toast.service';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -31,7 +31,7 @@ export class AuthPageComponent implements OnDestroy {
     confirmPassword: new FormControl('', [Validators.required]),
   });
 
-  constructor(config: NgbNavConfig, private authService: AuthService, private toastService: ToastService) {
+  constructor(config: NgbNavConfig, private authService: AuthService, private toastService: ToastService, private router: Router,) {
     config.destroyOnHide = false;
     config.roles = false;
   }
@@ -50,15 +50,15 @@ export class AuthPageComponent implements OnDestroy {
 
   onLoginSuccess(response: any) {
     const { message, detail } = response;
-    this.toastService.show(message);
+    this.toastService.show(message, ToastType.SUCCESS);
     for (const [key, value] of Object.entries(detail)) {
       localStorage.setItem(key, JSON.stringify(value))
     }
+    this.router.navigate(['/friends']);
   }
 
   onLoginError(err: any) {
-    console.error(err);
-    this.toastService.show(err['error']['message']);
+    this.toastService.show(err['error']['message'], ToastType.WARNING);
   }
 
   signUp() {
@@ -76,11 +76,16 @@ export class AuthPageComponent implements OnDestroy {
   }
 
   onSignUpSuccess(response: any) {
-
+    const { message, detail } = response;
+    this.toastService.show(message, ToastType.SUCCESS);
+    for (const [key, value] of Object.entries(detail)) {
+      localStorage.setItem(key, JSON.stringify(value))
+    }
+    this.router.navigate(['/friends']);
   }
 
   onSignUpError(err: any) {
-
+    this.toastService.show(err['error']['message'], ToastType.WARNING);
   }
 
   ngOnDestroy(): void {

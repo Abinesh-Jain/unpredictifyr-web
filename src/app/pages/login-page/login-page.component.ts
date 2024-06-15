@@ -20,9 +20,14 @@ export class LoginPageComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     const name = localStorage.getItem('name');
-    if (name) {
-      this.name.setValue(name);
-      this.router.navigate(['chat']);
+    if (name) this.name.setValue(this.tryParse(name));
+  }
+
+  tryParse(name: string) {
+    try {
+      return JSON.parse(name);
+    } catch (error) {
+      return name;
     }
   }
 
@@ -36,15 +41,6 @@ export class LoginPageComponent implements OnInit, AfterViewInit {
       this.router.navigate(['chat']);
     } else {
       document.querySelector('input')?.focus();
-    }
-  }
-
-  onImageLoaded(event: any, loaded: boolean) {
-    const element: HTMLElement = event.target;
-    if (loaded) {
-      element.classList.remove('d-none');
-    } else {
-      element.classList.add('d-none');
     }
   }
 

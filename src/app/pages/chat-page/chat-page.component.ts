@@ -1,20 +1,22 @@
-import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { ChatServiceService } from '../../services/chat-service/chat-service.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { Message, MessageType } from '../../models/message.modal';
 import { MessageService } from '../../services/message/message.service';
 import { Subscription } from 'rxjs';
+import { MenuComponent } from "../../components/menu/menu.component";
+import { ModalService } from '../../services/modal/modal.service';
 
 @Component({
   selector: 'app-chat-page',
   standalone: true,
   templateUrl: './chat-page.component.html',
   styleUrl: './chat-page.component.scss',
-  imports: [CommonModule, FormsModule]
+  imports: [CommonModule, FormsModule, MenuComponent, RouterModule]
 })
-export class ChatPageComponent implements OnInit, OnDestroy {
+export class ChatPageComponent implements OnInit, OnChanges, OnDestroy {
   @ViewChild('scroll') private scroll?: ElementRef;
 
   name: string = '';
@@ -23,9 +25,35 @@ export class ChatPageComponent implements OnInit, OnDestroy {
   mediaStream: MediaStream | undefined;
   private subscriptions: Subscription[] = [];
 
+  options = [
+    {
+      label: 'Settings',
+      onPressed: () => this.router.navigate(['/settings']),
+    },
+    {
+      label: 'Export chat',
+      onPressed: () => console.log('export'),
+    },
+    {
+      label: 'Clear chat',
+      onPressed: () => this.clearChat(),
+    },
+    {
+      label: 'Block',
+      onPressed: () => this.modalService.open('Delete', 'You sure ?', [{
+        distructive: false, label: 'Cancel', onPressed: () => console.log('cancel'),
+      }, {
+        distructive: true, label: 'Delete', onPressed: () => console.log('delete'),
+      },],),
+    }
+  ];
+
   MessageType = MessageType;
 
-  constructor(private chatService: ChatServiceService, private router: Router, private messageService: MessageService,) { }
+  @Input() user?: any;
+  @Input() fullHeight = true;
+
+  constructor(private chatService: ChatServiceService, private router: Router, private messageService: MessageService, private modalService: ModalService) { }
 
 
   ngOnInit(): void {
@@ -33,16 +61,30 @@ export class ChatPageComponent implements OnInit, OnDestroy {
     if (!name) this.router.navigate(['']);
     this.name = name!;
     this.chatService.emit('name', name);
-    this.messageService.getAllMessages().then((messages: Message[]) => {
-      this.messages = messages;
-      this.scrollToBottom();
-    })
+    this.loadMessages();
     this.subscriptions.push(
       this.chatService.onEvent('connect').subscribe(() => this.onConnectionChanged(true)),
       this.chatService.onEvent('disconnect').subscribe(() => this.onConnectionChanged(false)),
       this.chatService.onEvent('info').subscribe(info => this.onInfoReceived(info)),
       this.chatService.onEvent('message').subscribe(message => this.onMessageReceived(message)),
     );
+  }
+
+  loadMessages() {
+    this.messageService.getAllMessages().then((messages: Message[]) => {
+      this.messages = messages;
+      this.scrollToBottom();
+    })
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['user']) {
+      if (changes['user'].currentValue) {
+        this.messages = [];
+      } else {
+        this.loadMessages();
+      }
+    }
   }
 
   ngOnDestroy(): void {
@@ -61,6 +103,7 @@ export class ChatPageComponent implements OnInit, OnDestroy {
       timestamp: new Date(),
       isSent: false,
       type: MessageType.info,
+      group: true,
     };
     this.messages.push(msg);
     this.scrollToBottom();
@@ -74,6 +117,7 @@ export class ChatPageComponent implements OnInit, OnDestroy {
       timestamp: new Date(info['timestamp']),
       isSent: false,
       type: MessageType.info,
+      group: true,
     }
     this.messages.push(msg);
     this.scrollToBottom();
@@ -87,6 +131,7 @@ export class ChatPageComponent implements OnInit, OnDestroy {
       timestamp: new Date(message['timestamp']),
       isSent: false,
       type: MessageType.received,
+      group: true,
     };
     this.messages.push(msg);
     this.scrollToBottom();
@@ -102,6 +147,7 @@ export class ChatPageComponent implements OnInit, OnDestroy {
       timestamp: new Date(),
       isSent: true,
       type: MessageType.sent,
+      group: true,
     };
     this.messages.push(message);
     this.message = '';

@@ -6,6 +6,7 @@ import { SettingsPageComponent } from './pages/settings-page/settings-page.compo
 import { VideoPageComponent } from './pages/video-page/video-page.component';
 import { GamePageComponent } from './pages/game-page/game-page.component';
 import { AuthPageComponent } from './pages/auth-page/auth-page.component';
+import { FriendsPageComponent } from './pages/friends-page/friends-page.component';
 
 export const routes: Routes = [
     {
@@ -35,6 +36,10 @@ export const routes: Routes = [
     {
         path: 'auth',
         component: AuthPageComponent
+    },
+    {
+        path: 'friends',
+        component: FriendsPageComponent
     },
     {
         path: '**',

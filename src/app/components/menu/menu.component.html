@@ -1,0 +1,9 @@
+<div ngbDropdown class="d-inline-block">
+    <button #menu type="button" class="btn" ngbDropdownToggle>
+        <i class="bi bi-three-dots-vertical"></i> {{label}}
+    </button>
+    <div ngbDropdownMenu>
+        <button *ngFor="let option of options" type="button" (click)="option.onPressed()"
+            ngbDropdownItem>{{option.label}}</button>
+    </div>
+</div>

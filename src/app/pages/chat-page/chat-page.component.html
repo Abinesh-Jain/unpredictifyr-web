@@ -1,7 +1,16 @@
-<div class="container-fluid dvh-100 p-0">
+<div class="container-fluid p-0" [ngClass]="fullHeight ?'dvh-100':'h-100'">
     <div class="card h-100">
         <div class="card-header fs-3 d-flex justify-content-between">
-            <div> Global Chat </div>
+            <div>{{user ? user['name']: 'Global Chat' }}</div>
+            <div>
+                <button type="button" class="btn" routerLink="/video">
+                    <i class="bi bi-camera-video"></i>
+                </button>
+                <button type="button" class="btn">
+                    <i class="bi bi-telephone"></i>
+                </button>
+                <app-menu [options]="options"></app-menu>
+            </div>
         </div>
         <div class="card-body overflow-auto" #scroll>
             <div *ngFor="let message of messages">
@@ -22,7 +31,7 @@
         </div>
         <div class="card-footer">
             <div class="input-group">
-                <!-- <button class="btn" type="button" (click)="react()">
+                <!-- <button class="btn btn-danger" type="button" (click)="react()">
                     😊
                 </button> -->
                 <input type="text" class="form-control" [(ngModel)]="message" placeholder="Type your message..."

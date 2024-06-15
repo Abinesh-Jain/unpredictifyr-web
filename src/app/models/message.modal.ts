@@ -6,6 +6,7 @@ export interface Message {
     isRead?: boolean;
     attachment?: string;
     type: MessageType;
+    group?: boolean;
 }
 
 export enum MessageType {

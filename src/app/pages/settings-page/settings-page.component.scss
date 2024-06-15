@@ -1,0 +1,34 @@
+.large-toggle {
+    width: 60px;
+    height: 34px;
+    position: relative;
+}
+
+.large-toggle::before {
+    position: absolute;
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+.large-toggle:checked::before {
+    transform: translateX(26px);
+}
+
+.large-toggle::after {
+    position: absolute;
+    display: block;
+    width: 60px;
+    height: 34px;
+    border-radius: 34px;
+    background-color: #ccc;
+    transition: background-color 0.4s;
+}
+
+.large-toggle:checked::after {
+    background-color: #2196F3;
+}

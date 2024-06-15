@@ -18,12 +18,13 @@
                 </div>
                 <div class="form-group mb-3">
                     <input type="text" class="form-control form-control-lg" placeholder="Enter name" [formControl]=name
-                        (keydown.enter)="submit()">
+                        (keydown.enter)="submit()"
+                        [ngClass]="{'is-invalid': name.invalid && name.touched, 'is-valid': !name.invalid && name.touched}">
                     <div *ngIf="name.invalid && (name.dirty || name.touched)" class="text-danger form-text">
                         Please enter your name.
                     </div>
                 </div>
-                <button class="btn btn-primary w-100" (click)="submit()">
+                <button type="button" class="btn btn-primary w-100" (click)="submit()">
                     Get Started
                 </button>
                 <div class="text-center">

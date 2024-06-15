@@ -1,7 +1,7 @@
 <div class="dvh-100 p-5">
     <div class="row h-100">
         <div class="col rounded p-5 picsum d-none d-sm-none d-md-block" appPicsum></div>
-        <div class="col p-0 p-sm-0 p-md-5 d-flex flex-column justify-content-between">
+        <div class="col p-0 p-sm-0 p-md-5 d-flex flex-column">
             <ul ngbNav #nav="ngbNav" class="nav-tabs">
                 <li ngbNavItem>
                     <a ngbNavLink>LOGIN</a>
@@ -11,11 +11,12 @@
                             <div class="input-group mb-3">
                                 <span class="input-group-text">&#64;</span>
                                 <input type="email" formControlName="email" class="form-control"
-                                    placeholder="example@mail.com" name="email">
+                                    placeholder="example@mail.com" name="email" required>
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Password</label>
-                                <input type="password" formControlName="password" class="form-control" name="password">
+                                <input type="password" formControlName="password" class="form-control"
+                                    autocomplete="new-password" name="password" required>
                             </div>
                             <div class="row mb-4">
                                 <div class="col-md-6 d-flex justify-content-center">
