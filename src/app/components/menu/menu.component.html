@@ -1,9 +1,11 @@
 <div ngbDropdown class="d-inline-block">
     <button #menu type="button" class="btn" ngbDropdownToggle>
-        <i class="bi bi-three-dots-vertical"></i> {{label}}
+        <i class="bi bi-{{icon}}"></i> {{label}}
     </button>
     <div ngbDropdownMenu>
-        <button *ngFor="let option of options" type="button" (click)="option.onPressed()"
-            ngbDropdownItem>{{option.label}}</button>
+        <button *ngFor="let option of options" type="button" (click)="option.onPressed()" ngbDropdownItem>
+            <i *ngIf="option.icon" class="bi bi-{{option.icon}}"></i> {{label}}
+            {{option.label}}
+        </button>
     </div>
 </div>

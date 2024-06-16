@@ -8,6 +8,7 @@ import { MessageService } from '../../services/message/message.service';
 import { Subscription } from 'rxjs';
 import { MenuComponent } from "../../components/menu/menu.component";
 import { ModalService } from '../../services/modal/modal.service';
+import { OffcanvasService } from '../../services/offcanvas/offcanvas.service';
 
 @Component({
   selector: 'app-chat-page',
@@ -17,7 +18,8 @@ import { ModalService } from '../../services/modal/modal.service';
   imports: [CommonModule, FormsModule, MenuComponent, RouterModule]
 })
 export class ChatPageComponent implements OnInit, OnChanges, OnDestroy {
-  @ViewChild('scroll') private scroll?: ElementRef;
+  @ViewChild('scroll') private scroll?: ElementRef<HTMLDivElement>;
+  @ViewChild('input') private input?: ElementRef<HTMLInputElement>;
 
   name: string = '';
   message: string = '';
@@ -27,24 +29,67 @@ export class ChatPageComponent implements OnInit, OnChanges, OnDestroy {
 
   options = [
     {
+      label: 'Chat info',
+      onPressed: () => this.offcanvasService.open('Chat Info', 'This is the Info'),
+      icon: 'people',
+    },
+    {
       label: 'Settings',
       onPressed: () => this.router.navigate(['/settings']),
+      icon: 'gear',
     },
     {
       label: 'Export chat',
-      onPressed: () => console.log('export'),
+      onPressed: () => this.modalService.open(
+        'Export Chat',
+        'Select the desired format of export.',
+        [
+          {
+            distructive: false,
+            label: 'Export as Excel',
+            onPressed: () => this.messageService.exportMessagesAsXLS(),
+            icon: 'filetype-xls',
+          },
+          {
+            distructive: false,
+            label: 'Export as CSV',
+            onPressed: () => this.messageService.exportMessagesAsCSV(),
+            icon: 'filetype-csv',
+          },
+          {
+            distructive: false,
+            label: 'Export as JSON',
+            onPressed: () => this.messageService.exportMessagesAsJSON(),
+            icon: 'filetype-json',
+          },
+        ],
+      ),
+      icon: 'box-arrow-down',
     },
     {
       label: 'Clear chat',
-      onPressed: () => this.clearChat(),
+      onPressed: () => this.modalService.open(
+        'Clear chat ?',
+        'This will clear all the chat from this device.',
+        [
+          {
+            distructive: false,
+            label: 'Cancel',
+            onPressed: () => console.log('cancel'),
+          },
+          {
+            distructive: true,
+            label: 'Clear',
+            onPressed: () => this.clearChat(),
+          },
+        ],
+      ),
+      icon: 'x-circle',
     },
     {
       label: 'Block',
-      onPressed: () => this.modalService.open('Delete', 'You sure ?', [{
-        distructive: false, label: 'Cancel', onPressed: () => console.log('cancel'),
-      }, {
-        distructive: true, label: 'Delete', onPressed: () => console.log('delete'),
-      },],),
+      onPressed: () => { },
+      icon: 'ban',
     }
   ];
 
@@ -53,7 +98,13 @@ export class ChatPageComponent implements OnInit, OnChanges, OnDestroy {
   @Input() user?: any;
   @Input() fullHeight = true;
 
-  constructor(private chatService: ChatServiceService, private router: Router, private messageService: MessageService, private modalService: ModalService) { }
+  constructor(
+    private chatService: ChatServiceService,
+    private router: Router,
+    private messageService: MessageService,
+    private modalService: ModalService,
+    private offcanvasService: OffcanvasService,
+  ) { }
 
 
   ngOnInit(): void {
@@ -140,7 +191,7 @@ export class ChatPageComponent implements OnInit, OnChanges, OnDestroy {
 
   sendMessage() {
     if (this.message.trim().length <= 0) return;
-    this.chatService.emit('message', this.message);
+    this.chatService.emit('message', { 'message': this.message });
     let message: Message = {
       text: this.message,
       sender: 'You',
@@ -152,7 +203,7 @@ export class ChatPageComponent implements OnInit, OnChanges, OnDestroy {
     this.messages.push(message);
     this.message = '';
     this.scrollToBottom();
-    document.querySelector('input')?.focus();
+    this.input?.nativeElement.focus();
     this.messageService.addMessage(message);
   }
 

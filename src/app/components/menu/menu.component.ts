@@ -5,6 +5,7 @@ import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 export interface Option {
   label: string,
   onPressed: () => void,
+  icon?: string,
 }
 
 @Component({
@@ -16,6 +17,7 @@ export interface Option {
 })
 export class MenuComponent implements AfterViewInit {
 
+  @Input() icon: string = 'three-dots-vertical';
   @Input() label?: string;
   @Input() options: Option[] = [];
 

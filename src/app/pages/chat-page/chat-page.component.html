@@ -34,7 +34,7 @@
                 <!-- <button class="btn btn-danger" type="button" (click)="react()">
                     😊
                 </button> -->
-                <input type="text" class="form-control" [(ngModel)]="message" placeholder="Type your message..."
+                <input #input type="text" class="form-control" [(ngModel)]="message" placeholder="Type your message..."
                     (keydown.enter)="sendMessage()">
                 <button class="btn btn-primary" type="button" (click)="sendMessage()">
                     Send

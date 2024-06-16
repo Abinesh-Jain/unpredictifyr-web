@@ -6,6 +6,7 @@ export interface Action {
   label: string,
   onPressed: VoidFunction,
   distructive: boolean,
+  icon?: string,
 }
 
 @Component({

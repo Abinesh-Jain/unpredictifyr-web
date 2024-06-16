@@ -7,8 +7,9 @@
         {{body}}
     </div>
     <div class="modal-footer">
-        <button type="button" *ngFor="let action of actions" class="btn "
+        <button type="button" *ngFor="let action of actions" class="btn"
             [ngClass]="action.distructive ? 'btn-danger':'btn-outline-secondary'" (click)="close(action.onPressed)">
+            <i *ngIf="action.icon" class="bi bi-{{action.icon}}"></i>
             {{action.label}}
         </button>
     </div>
