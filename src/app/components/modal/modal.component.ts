@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import {  Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import {  NgbModal, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 
 export interface Action {
   label: string,
@@ -12,7 +12,7 @@ export interface Action {
 @Component({
   selector: 'app-modal',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule,NgbTooltipModule],
   templateUrl: './modal.component.html',
   styleUrl: './modal.component.scss'
 })

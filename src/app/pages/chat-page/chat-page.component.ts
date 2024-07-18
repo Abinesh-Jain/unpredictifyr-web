@@ -9,13 +9,14 @@ import { Subscription } from 'rxjs';
 import { MenuComponent } from "../../components/menu/menu.component";
 import { ModalService } from '../../services/modal/modal.service';
 import { OffcanvasService } from '../../services/offcanvas/offcanvas.service';
+import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-chat-page',
   standalone: true,
   templateUrl: './chat-page.component.html',
   styleUrl: './chat-page.component.scss',
-  imports: [CommonModule, FormsModule, MenuComponent, RouterModule]
+  imports: [CommonModule, FormsModule, MenuComponent, RouterModule,NgbTooltipModule]
 })
 export class ChatPageComponent implements OnInit, OnChanges, OnDestroy {
   @ViewChild('scroll') private scroll?: ElementRef<HTMLDivElement>;

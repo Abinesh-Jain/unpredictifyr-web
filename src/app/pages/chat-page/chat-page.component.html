@@ -3,10 +3,10 @@
         <div class="card-header fs-3 d-flex justify-content-between">
             <div>{{user ? user['name']: 'Global Chat' }}</div>
             <div>
-                <button type="button" class="btn" routerLink="/video">
+                <button type="button" class="btn" routerLink="/video" ngbTooltip="Video Call">
                     <i class="bi bi-camera-video"></i>
                 </button>
-                <button type="button" class="btn">
+                <button type="button" class="btn"  ngbTooltip="Audio Call">
                     <i class="bi bi-telephone"></i>
                 </button>
                 <app-menu [options]="options"></app-menu>
@@ -36,7 +36,7 @@
                 </button> -->
                 <input #input type="text" class="form-control" [(ngModel)]="message" placeholder="Type your message..."
                     (keydown.enter)="sendMessage()">
-                <button class="btn btn-primary" type="button" (click)="sendMessage()">
+                <button class="btn btn-primary" type="button" (click)="sendMessage()"  ngbTooltip="Send">
                     Send
                 </button>
             </div>
