@@ -7,6 +7,7 @@ import { VideoPageComponent } from './pages/video-page/video-page.component';
 import { GamePageComponent } from './pages/game-page/game-page.component';
 import { AuthPageComponent } from './pages/auth-page/auth-page.component';
 import { FriendsPageComponent } from './pages/friends-page/friends-page.component';
+import { MapPageComponent } from './pages/map-page/map-page.component';
 
 export const routes: Routes = [
     {
@@ -40,6 +41,10 @@ export const routes: Routes = [
     {
         path: 'friends',
         component: FriendsPageComponent
+    },
+    {
+        path: 'map',
+        component: MapPageComponent
     },
     {
         path: '**',

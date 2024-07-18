@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { AfterViewInit, Component, ElementRef, Input, ViewChild } from '@angular/core';
-import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDropdownModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 
 export interface Option {
   label: string,
@@ -11,7 +11,7 @@ export interface Option {
 @Component({
   selector: 'app-menu',
   standalone: true,
-  imports: [NgbDropdownModule, CommonModule],
+  imports: [NgbDropdownModule, CommonModule, NgbTooltipModule],
   templateUrl: './menu.component.html',
   styleUrl: './menu.component.scss',
 })
@@ -20,6 +20,7 @@ export class MenuComponent implements AfterViewInit {
   @Input() icon: string = 'three-dots-vertical';
   @Input() label?: string;
   @Input() options: Option[] = [];
+  @Input() placement = 'start';
 
   @ViewChild('menu') menu!: ElementRef<HTMLButtonElement>;
 
