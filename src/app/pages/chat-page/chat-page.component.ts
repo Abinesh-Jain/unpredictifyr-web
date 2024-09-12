@@ -10,13 +10,14 @@ import { MenuComponent } from "../../components/menu/menu.component";
 import { ModalService } from '../../services/modal/modal.service';
 import { OffcanvasService } from '../../services/offcanvas/offcanvas.service';
 import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
+import { Strings } from '../../utils/strings';
 
 @Component({
   selector: 'app-chat-page',
   standalone: true,
   templateUrl: './chat-page.component.html',
   styleUrl: './chat-page.component.scss',
-  imports: [CommonModule, FormsModule, MenuComponent, RouterModule,NgbTooltipModule]
+  imports: [CommonModule, FormsModule, MenuComponent, RouterModule, NgbTooltipModule]
 })
 export class ChatPageComponent implements OnInit, OnChanges, OnDestroy {
   @ViewChild('scroll') private scroll?: ElementRef<HTMLDivElement>;
@@ -91,6 +92,11 @@ export class ChatPageComponent implements OnInit, OnChanges, OnDestroy {
       label: 'Block',
       onPressed: () => { },
       icon: 'ban',
+    },
+    {
+      label: Strings.logout,
+      onPressed: () => this.onLogoutButtonClicked(),
+      icon: 'box-arrow-left',
     }
   ];
 
@@ -119,6 +125,32 @@ export class ChatPageComponent implements OnInit, OnChanges, OnDestroy {
       this.chatService.onEvent('disconnect').subscribe(() => this.onConnectionChanged(false)),
       this.chatService.onEvent('info').subscribe(info => this.onInfoReceived(info)),
       this.chatService.onEvent('message').subscribe(message => this.onMessageReceived(message)),
+    );
+  }
+
+  logout() {
+    localStorage.clear();
+    this.messageService.clearMessages();
+    this.router.navigate(['']);
+  }
+
+  onLogoutButtonClicked() {
+    this.modalService.open(
+      Strings.logoutQuestion,
+      'Are you sure want to log out from Unpredictifyr ?',
+      [
+        {
+          distructive: false,
+          label: Strings.cancel,
+          onPressed: () => { },
+        },
+        {
+          distructive: true,
+          label: Strings.logout,
+          onPressed: () => this.logout(),
+          icon: 'box-arrow-left'
+        },
+      ],
     );
   }
 

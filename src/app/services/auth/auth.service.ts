@@ -24,4 +24,16 @@ export class AuthService {
       }
     });
   }
+
+  deleteAccount(email: string, password: string) {
+    return this.http.delete(
+      `${environment.baseURL}auth/delete`,
+      {
+        body: { email, password },
+        headers: {
+          token: 'secret'
+        }
+      },
+    );
+  }
 }
