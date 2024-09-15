@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { NgbNavConfig, NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { PicsumDirective } from '../../directives/picsum/picsum.directive';
 import { AuthService } from '../../services/auth/auth.service';

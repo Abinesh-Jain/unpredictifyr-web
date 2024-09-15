@@ -18,7 +18,19 @@
 }
 
 .dvh-100 {
-    height: 100dvh;
+    height: 100dvh !important;
+}
+
+.dvh-90 {
+    height: 90dvh !important;
+}
+
+.dvh-80 {
+    height: 80dvh !important;
+}
+
+.dvh-70 {
+    height: 70dvh !important;
 }
 
 .picsum {
@@ -36,4 +48,8 @@
 .center {
     display: grid;
     place-items: center;
+}
+
+.cursor-pointer {
+    cursor: pointer !important;
 }

@@ -1,0 +1,20 @@
+<div *ngIf="selectedFile">
+    <p><strong>Name:</strong> {{ selectedFile.name }}</p>
+    <p><strong>Size:</strong> {{ selectedFile.size }} bytes</p>
+    <p><strong>Type:</strong> {{ selectedFile.type }}</p>
+    <img *ngIf="imagePreview" [src]="imagePreview" alt="image" class="w-100" />
+    <a *ngIf="downloadLink" [href]="downloadLink" download="resized-image.jpg">
+        <button class="btn btn-primary">Download Resized Image</button>
+    </a>
+</div>
+<div class="border border-primary rounded dvh-90 m-3 center w-25 cursor-pointer" (dragover)="onDragOver($event)"
+    (drop)="onDrop($event)">
+    <i class="bi bi-plus-circle h1"></i>
+</div>
+<div class="input-group">
+    <input #file class="form-control" type="file" (change)="onFileSelected($event)" [multiple]="multiple"
+        accept="image/*" />
+    <span *ngIf="selectedFile" class="input-group-text" role="button" (click)="clear()">
+        <i class="bi bi-x-circle"></i>
+    </span>
+</div>

@@ -2,11 +2,12 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { CarsService } from '../../services/cars/cars.service';
 import { NgbCarouselModule } from '@ng-bootstrap/ng-bootstrap';
+import { FilePickerComponent } from "../../components/file-picker/file-picker.component";
 
 @Component({
   selector: 'app-test-page',
   standalone: true,
-  imports: [CommonModule, NgbCarouselModule],
+  imports: [CommonModule, NgbCarouselModule, FilePickerComponent],
   templateUrl: './test-page.component.html',
   styleUrl: './test-page.component.scss'
 })
