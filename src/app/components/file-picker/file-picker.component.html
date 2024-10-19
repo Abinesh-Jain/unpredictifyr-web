@@ -7,6 +7,9 @@
         <button class="btn btn-primary">Download Resized Image</button>
     </a>
 </div>
+<div *ngFor="let image of images">
+    <img src="{{image}}" alt="" srcset="">
+</div>
 <div class="border border-primary rounded dvh-90 m-3 center w-25 cursor-pointer" (dragover)="onDragOver($event)"
     (drop)="onDrop($event)">
     <i class="bi bi-plus-circle h1"></i>

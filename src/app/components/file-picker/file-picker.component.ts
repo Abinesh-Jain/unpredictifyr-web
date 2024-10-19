@@ -12,6 +12,7 @@ export class FilePickerComponent {
   selectedFile: File | null = null;
   imagePreview: string | ArrayBuffer | null = '';
   downloadLink: string | null = null;
+  images: any[] = [];
 
   @Input() multiple: boolean = false;
 
@@ -31,6 +32,7 @@ export class FilePickerComponent {
         reader.onload = (e) => {
           this.imagePreview = reader.result;
           image.src = e.target?.result as string;
+          this.images.push(image.src);
         };
         image.onload = () => {
           const width = image.width;
